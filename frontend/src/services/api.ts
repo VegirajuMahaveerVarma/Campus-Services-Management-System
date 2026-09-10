@@ -1,0 +1,9 @@
+import axios from 'axios';
+const api=axios.create({baseURL:import.meta.env.VITE_API_URL||'http://localhost:8080/api'});
+api.interceptors.request.use(c=>{const t=localStorage.getItem('campus_token');if(t)c.headers.Authorization=`Bearer ${t}`;return c;});
+export const auth={login:(data:any)=>api.post('/auth/login',data),register:(data:any)=>api.post('/auth/register',data)};
+export const students={profile:()=>api.get('/students/profile'),update:(d:any)=>api.put('/students/profile',d),all:()=>api.get('/students')};
+export const complaints={mine:()=>api.get('/complaints/my'),all:()=>api.get('/complaints'),create:(d:any)=>api.post('/complaints',d),status:(id:number,status:string)=>api.put(`/complaints/${id}/status`,{status})};
+export const events={list:()=>api.get('/events'),create:(d:any)=>api.post('/admin/events',d),update:(id:number,d:any)=>api.put(`/admin/events/${id}`,d),remove:(id:number)=>api.delete(`/admin/events/${id}`)};
+export const notices={list:()=>api.get('/notices'),create:(d:any)=>api.post('/admin/notices',d),update:(id:number,d:any)=>api.put(`/admin/notices/${id}`,d),remove:(id:number)=>api.delete(`/admin/notices/${id}`)};
+export default api;
