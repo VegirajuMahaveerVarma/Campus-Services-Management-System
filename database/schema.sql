@@ -1,5 +1,52 @@
 CREATE DATABASE IF NOT EXISTS campus_services;
 USE campus_services;
 
--- Core schema will be expanded with JPA entities and migrations.
--- Planned tables: users, students, complaints, events, notices.
+CREATE TABLE IF NOT EXISTS users (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ email VARCHAR(100) NOT NULL UNIQUE,
+ password VARCHAR(255) NOT NULL,
+ role VARCHAR(20) NOT NULL,
+ enabled BOOLEAN NOT NULL DEFAULT TRUE,
+ CHECK (role IN ('STUDENT','ADMIN'))
+);
+
+CREATE TABLE IF NOT EXISTS students (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ user_id BIGINT NOT NULL UNIQUE,
+ full_name VARCHAR(255) NOT NULL,
+ roll_number VARCHAR(255) NOT NULL UNIQUE,
+ department VARCHAR(255),
+ year VARCHAR(50),
+ phone VARCHAR(50),
+ CONSTRAINT fk_student_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS complaints (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ student_id BIGINT NOT NULL,
+ title VARCHAR(255) NOT NULL,
+ description TEXT NOT NULL,
+ category VARCHAR(255),
+ status VARCHAR(30) NOT NULL DEFAULT 'OPEN',
+ created_at DATETIME NOT NULL,
+ updated_at DATETIME,
+ CONSTRAINT fk_complaint_student FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS events (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ title VARCHAR(255) NOT NULL,
+ description TEXT,
+ event_date DATETIME NOT NULL,
+ venue VARCHAR(255),
+ organizer VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS notices (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ title VARCHAR(255) NOT NULL,
+ content TEXT NOT NULL,
+ category VARCHAR(255),
+ published_at DATETIME NOT NULL,
+ active BOOLEAN NOT NULL DEFAULT TRUE
+);
