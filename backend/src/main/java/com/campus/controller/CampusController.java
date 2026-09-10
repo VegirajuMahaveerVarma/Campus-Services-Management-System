@@ -1,0 +1,6 @@
+package com.campus.controller;
+import com.campus.entity.*; import com.campus.service.CampusService; import jakarta.validation.Valid; import org.springframework.web.bind.annotation.*; import java.util.*;
+@RestController @RequestMapping("/api") public class CampusController { private final CampusService s; public CampusController(CampusService s){this.s=s;}
+@GetMapping("/events") public List<Event> events(){return s.events();} @PostMapping("/admin/events") public Event createEvent(@Valid @RequestBody Event e){return s.saveEvent(e);} @PutMapping("/admin/events/{id}") public Event updateEvent(@PathVariable Long id,@RequestBody Event e){e.setId(id);return s.saveEvent(e);} @DeleteMapping("/admin/events/{id}") public void deleteEvent(@PathVariable Long id){s.deleteEvent(id);}
+@GetMapping("/notices") public List<Notice> notices(){return s.notices();} @PostMapping("/admin/notices") public Notice createNotice(@Valid @RequestBody Notice n){return s.saveNotice(n);} @PutMapping("/admin/notices/{id}") public Notice updateNotice(@PathVariable Long id,@RequestBody Notice n){n.setId(id);return s.saveNotice(n);} @DeleteMapping("/admin/notices/{id}") public void deleteNotice(@PathVariable Long id){s.deleteNotice(id);}
+}
