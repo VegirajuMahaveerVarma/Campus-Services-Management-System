@@ -40,6 +40,6 @@ class ComplaintServiceTest {
   when(complaints.findById(2L)).thenReturn(Optional.of(c));
   when(complaints.save(c)).thenReturn(c);
   assertEquals(ComplaintStatus.RESOLVED,service.updateStatus(2L,new StatusRequest("RESOLVED")).getStatus());
-  verify(notifications).notifyUser(eq(studentUser),contains("Complaint updated"),contains("RESOLVED"),eq("STATUS_UPDATE"));
+  verify(notifications).notifyUser(eq(studentUser),contains("Complaint status updated"),contains("RESOLVED"),eq("STATUS_UPDATE"));
  }
 }
