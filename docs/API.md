@@ -20,11 +20,23 @@ Send the returned token as `Authorization: Bearer <token>`.
 | POST | `/complaints` | Student | Create complaint |
 | GET | `/complaints/my` | Student | View own complaints |
 | GET | `/events` | Authenticated | View events |
+| POST | `/events/{eventId}/registrations` | Authenticated | Register for an event |
 | GET | `/notices` | Authenticated | View active notices |
 | GET | `/notifications` | Authenticated | View personal notifications |
 | GET | `/notifications/unread-count` | Authenticated | Get unread notification count |
 | PUT | `/notifications/{id}/read` | Authenticated | Mark one notification as read |
 | PUT | `/notifications/read-all` | Authenticated | Mark all notifications as read |
+
+### Event registration fields
+
+Students provide:
+
+- Full name
+- Gmail address
+- Phone number
+- Roll number
+
+The backend prevents duplicate registration for the same event by Gmail address or roll number.
 
 ## Admin
 
@@ -37,6 +49,7 @@ Send the returned token as `Authorization: Bearer <token>`.
 | POST | `/admin/events` | Admin | Create event |
 | PUT | `/admin/events/{id}` | Admin | Update event |
 | DELETE | `/admin/events/{id}` | Admin | Delete event |
+| GET | `/events/{eventId}/registrations` | Admin | View event registrations |
 | POST | `/admin/notices` | Admin | Publish notice |
 | PUT | `/admin/notices/{id}` | Admin | Update notice |
 | DELETE | `/admin/notices/{id}` | Admin | Delete notice |
