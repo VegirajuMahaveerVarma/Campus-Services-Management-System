@@ -7,7 +7,7 @@ const serviceOptions = [
 
 const style = document.createElement('style');
 style.textContent = `
-.csms-services-section{margin:0 0 22px}.csms-box{background:#fff;border:1px solid #e1e6ef;border-radius:18px;padding:22px}.csms-box h3{margin:4px 0 6px;font-size:21px}.csms-box p{color:#6b778c;line-height:1.6;margin:0 0 16px}.csms-services{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.csms-service{border:1px solid #e1e6ef;background:#fff;border-radius:14px;padding:17px;text-align:left;transition:.15s}.csms-service:hover{border-color:#bfc9df;transform:translateY(-1px);box-shadow:0 8px 24px #1720330d}.csms-service b{display:block;font-size:13px}.csms-service span{display:block;color:#778297;font-size:11px;margin-top:6px;line-height:1.45}.csms-modal{position:fixed;inset:0;z-index:10000;background:#0f172a99;display:grid;place-items:center;padding:20px}.csms-modal-card{width:min(680px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:18px;padding:26px;box-shadow:0 24px 80px #0f172a40}.csms-modal-head{display:flex;justify-content:space-between;align-items:flex-start}.csms-close{border:0;background:none;font-size:27px;color:#667085;cursor:pointer}.csms-form{display:grid;gap:13px;margin-top:18px}.csms-form label{display:grid;gap:6px;font-size:12px;font-weight:700;color:#49566b}.csms-form input,.csms-form textarea{padding:12px;border:1px solid #dbe1eb;border-radius:10px}.csms-form textarea{min-height:90px;resize:vertical}.csms-actions{display:flex;justify-content:flex-end;gap:8px}.csms-msg{font-size:12px;color:#147447}
+.csms-services-section{margin:0 0 22px}.csms-box{background:#fff;border:1px solid #e1e6ef;border-radius:18px;padding:22px}.csms-box h3{margin:4px 0 6px;font-size:21px}.csms-box p{color:#6b778c;line-height:1.6;margin:0 0 16px}.csms-services{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.csms-service{border:1px solid #e1e6ef;background:#fff;border-radius:14px;padding:17px;text-align:left;transition:.15s}.csms-service:hover{border-color:#bfc9df;transform:translateY(-1px);box-shadow:0 8px 24px #1720330d}.csms-service b{display:block;font-size:13px}.csms-service span{display:block;color:#778297;font-size:11px;margin-top:6px;line-height:1.45}.csms-modal{position:fixed;inset:0;z-index:10000;background:#0f172a99;display:grid;place-items:center;padding:20px}.csms-modal-card{width:min(680px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:18px;padding:26px;box-shadow:0 24px 80px #0f172a40}.csms-modal-head{display:flex;justify-content:space-between;align-items:flex-start}.csms-close{border:0;background:none;font-size:27px;color:#667085;cursor:pointer}.csms-form{display:grid;gap:13px;margin-top:18px}.csms-form label{display:grid;gap:6px;font-size:12px;font-weight:700;color:#49566b}.csms-form input,.csms-form textarea{padding:12px;border:1px solid #dbe1eb;border-radius:10px}.csms-form textarea{min-height:90px;resize:vertical}.csms-actions{display:flex;justify-content:flex-end;gap:8px}.csms-msg{font-size:12px;color:#147447}.csms-nav{display:flex!important;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer}.csms-nav.active{background:#20283a!important;color:#fff!important}
 @media(max-width:1000px){.csms-services{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:650px){.csms-services{grid-template-columns:1fr}}
 `;
 document.head.appendChild(style);
@@ -29,7 +29,29 @@ const openService = (service: string) => {
   });
 };
 
+const addStudentServicesNav = () => {
+  const nav = document.querySelector('aside nav');
+  if (!nav || nav.querySelector('[data-student-services-nav]')) return;
+  const eventButton = Array.from(nav.querySelectorAll<HTMLButtonElement>('.nav')).find(button => button.textContent?.trim().toLowerCase() === 'events');
+  const noticesButton = Array.from(nav.querySelectorAll<HTMLButtonElement>('.nav')).find(button => button.textContent?.trim().toLowerCase() === 'notices');
+  if (!eventButton || !noticesButton) return;
+  const button = document.createElement('button');
+  button.className = 'nav csms-nav';
+  button.dataset.studentServicesNav = 'true';
+  button.innerHTML = '<span class="nav-icon">▣</span>Student Services';
+  button.addEventListener('click', () => {
+    noticesButton.click();
+    setTimeout(() => {
+      document.querySelector('[data-csms-enhance]')?.scrollIntoView({behavior:'smooth',block:'start'});
+      nav.querySelectorAll('.nav').forEach(x => x.classList.remove('active'));
+      button.classList.add('active');
+    }, 120);
+  });
+  eventButton.insertAdjacentElement('afterend', button);
+};
+
 const mount = () => {
+  addStudentServicesNav();
   const noticesHeader = Array.from(document.querySelectorAll('header')).find(header => header.querySelector('h2')?.textContent?.trim().toLowerCase() === 'notices');
   if (!noticesHeader || document.querySelector('[data-csms-enhance]')) return;
 
@@ -37,13 +59,10 @@ const mount = () => {
   root.dataset.csmsEnhance = 'true';
   root.className = 'csms-services-section';
   root.innerHTML = `<div class="csms-box"><span class="eyebrow">Student Services</span><h3>Student Services</h3><p>Request common academic and student documents directly from the campus portal.</p><div class="csms-services">${serviceOptions.map(s => `<button class="csms-service" data-service="${s}"><b>${s}</b><span>Click to create a service request</span></button>`).join('')}</div></div>`;
-
   noticesHeader.insertAdjacentElement('afterend', root);
   root.querySelectorAll<HTMLButtonElement>('[data-service]').forEach(button => button.addEventListener('click', () => openService(button.dataset.service || 'Student Service')));
 };
 
-const observer = new MutationObserver(() => {
-  if (!document.querySelector('[data-csms-enhance]')) mount();
-});
-observer.observe(document.body, { childList: true, subtree: true });
+const observer = new MutationObserver(() => mount());
+observer.observe(document.body, {childList:true, subtree:true});
 setTimeout(mount, 200);
