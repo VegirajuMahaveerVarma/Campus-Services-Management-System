@@ -27,7 +27,7 @@ public class Notification {
     private String type;
 
     @Builder.Default
-    @Column(nullable=false)
+    @Column(name="is_read", nullable=false)
     private boolean read=false;
 
     @Column(nullable=false)
