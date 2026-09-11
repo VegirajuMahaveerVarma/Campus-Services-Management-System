@@ -11,6 +11,7 @@ public class Notice {
  @Column(nullable=false, columnDefinition="TEXT") private String content;
  private String category;
  @Column(nullable=false) private LocalDateTime publishedAt;
+ @Builder.Default
  private boolean active=true;
  @PrePersist void prePersist(){ if(publishedAt==null) publishedAt=LocalDateTime.now(); }
 }
