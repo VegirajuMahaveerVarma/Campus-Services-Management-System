@@ -14,7 +14,10 @@ public class InitialDataConfig {
     @Bean
     CommandLineRunner seedInitialEvent(EventRepository events) {
         return args -> {
-            if (events.count() == 0) {
+            boolean exists = events.findAll().stream()
+                    .anyMatch(event -> "AI & Emerging Technologies Workshop".equalsIgnoreCase(event.getTitle()));
+
+            if (!exists) {
                 events.save(Event.builder()
                         .title("AI & Emerging Technologies Workshop")
                         .description("A hands-on technical session covering practical AI tools, emerging technologies and project ideas for students.")
