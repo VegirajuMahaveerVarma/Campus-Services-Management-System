@@ -4,7 +4,7 @@ import com.campus.dto.EventRegistrationDtos.CreateRequest;
 import com.campus.entity.EventRegistration;
 import com.campus.service.EventRegistrationService;
 import jakarta.validation.Valid;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -20,8 +20,9 @@ public class EventRegistrationController {
         return service.register(eventId, request);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{eventId}/registrations")
-    public List<EventRegistration> registrations(@PathVariable Long eventId, Authentication authentication) {
+    public List<EventRegistration> registrations(@PathVariable Long eventId) {
         return service.list(eventId);
     }
 }
