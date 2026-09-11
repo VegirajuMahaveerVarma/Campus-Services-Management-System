@@ -6,4 +6,6 @@ export const students={profile:()=>api.get('/students/profile'),update:(d:any)=>
 export const complaints={mine:()=>api.get('/complaints/my'),all:()=>api.get('/complaints'),create:(d:any)=>api.post('/complaints',d),status:(id:number,status:string)=>api.put(`/complaints/${id}/status`,{status})};
 export const events={list:()=>api.get('/events'),create:(d:any)=>api.post('/admin/events',d),update:(id:number,d:any)=>api.put(`/admin/events/${id}`,d),remove:(id:number)=>api.delete(`/admin/events/${id}`)};
 export const notices={list:()=>api.get('/notices'),create:(d:any)=>api.post('/admin/notices',d),update:(id:number,d:any)=>api.put(`/admin/notices/${id}`,d),remove:(id:number)=>api.delete(`/admin/notices/${id}`)};
+export const notifications={list:()=>api.get('/notifications'),unreadCount:()=>api.get('/notifications/unread-count'),markRead:(id:number)=>api.put(`/notifications/${id}/read`),markAllRead:()=>api.put('/notifications/read-all')};
+export const analytics={summary:()=>api.get('/admin/analytics')};
 export default api;
